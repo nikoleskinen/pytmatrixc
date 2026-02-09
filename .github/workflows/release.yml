@@ -88,20 +88,16 @@ jobs:
         with:
           files: dist/*
 
-  publish_testpypi:
-    name: Publish to TestPyPI
+  publish_pypi:
+    name: Publish to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
-
-    if: github.event_name == 'workflow_dispatch'
-
+    if: github.event_name == 'release' && github.event.action == 'published'
     environment:
-      name: testpypi
-      url: https://test.pypi.org/p/${{ github.event.repository.name }}
-
+      name: pypi
+      url: https://pypi.org/p/${{ github.event.repository.name }}
     permissions:
       id-token: write
-
     steps:
       - name: Download all artifacts
         uses: actions/download-artifact@v6
@@ -109,8 +105,5 @@ jobs:
           pattern: cibw-*
           path: dist
           merge-multiple: true
-
-      - name: Publish to TestPyPI
+      - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
