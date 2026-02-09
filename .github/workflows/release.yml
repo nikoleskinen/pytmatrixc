@@ -16,26 +16,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-
       - name: Build wheels
         uses: pypa/cibuildwheel@v3.3.1
         env:
-
           MACOSX_DEPLOYMENT_TARGET: "15.0"
           CIBW_BUILD: "cp310-* cp311-* cp312-* cp313-* cp314-*"
           CIBW_ARCHS_LINUX: "x86_64"
           CIBW_ARCHS_MACOS: "${{ matrix.os == 'macos-15-intel' && 'x86_64' || 'arm64' }}"
           CIBW_ARCHS_WINDOWS: "AMD64"
-          
+
           CIBW_BEFORE_ALL_LINUX: >
             if command -v yum &> /dev/null; then
               yum install -y gcc-gfortran
             fi
           CIBW_BEFORE_ALL_MUSLLINUX: "apk add --no-cache gfortran"
-
           CIBW_BEFORE_ALL_MACOS: >
             ln -s $(which gfortran-15 || which gfortran-14 || which gfortran-13 || which gfortran-12) /usr/local/bin/gfortran
-          
+
           CIBW_BEFORE_BUILD_WINDOWS: "pip install delvewheel"
           CIBW_REPAIR_WHEEL_COMMAND_WINDOWS: "delvewheel repair -w {dest_dir} {wheel}"
 
@@ -53,7 +50,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -90,3 +87,30 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: dist/*
+
+  publish_testpypi:
+    name: Publish to TestPyPI
+    needs: [build_wheels, build_sdist]
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'workflow_dispatch'
+
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/${{ github.event.repository.name }}
+
+    permissions:
+      id-token: write
+
+    steps:
+      - name: Download all artifacts
+        uses: actions/download-artifact@v6
+        with:
+          pattern: cibw-*
+          path: dist
+          merge-multiple: true
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
