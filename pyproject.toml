@@ -2,12 +2,38 @@
 build-backend = 'mesonpy'
 requires = ['meson-python', "ninja", "numpy>=2"]
 
+
 [project]
 name = 'pytmatrixc'
 version = '0.3.4.dev0'
-description = 'pytmatrix with portable build'
+description = 'Modernised fork of pytmatrix package for T-matrix scattering computations'
+requires-python = ">=3.10"
+readme = "README.md"
+license = { file = "LICENSE" }
+authors = [{ name = "Jussi Leinonen", email = "jsleinonen@gmail.com" }]
+maintainers = [{ name = "Niko Leskinen", email = "niko.leskinen@fmi.fi" }]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Fortran",
+  "License :: OSI Approved :: MIT License",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Physics",
+]
 
 dependencies = [
   "numpy",
   "scipy",
 ]
+
+
+[project.urls]
+Homepage = "https://github.com/nikoleskinen/pytmatrixc"
+Repository = "https://github.com/nikoleskinen/pytmatrixc"
+"Bug Tracker" = "https://github.com/nikoleskinen/pytmatrixc/issues"
