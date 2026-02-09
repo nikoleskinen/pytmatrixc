@@ -1,0 +1,13 @@
+[build-system]
+build-backend = 'mesonpy'
+requires = ['meson-python', "ninja", "numpy>=2"]
+
+[project]
+name = 'pytmatrixc'
+version = '0.3.4.dev0'
+description = 'pytmatrix with portable build'
+
+dependencies = [
+  "numpy",
+  "scipy",
+]

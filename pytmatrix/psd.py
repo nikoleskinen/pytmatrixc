@@ -27,7 +27,7 @@ except ImportError:
     import pickle
 import warnings
 import numpy as np
-from scipy.integrate import trapz
+from scipy.integrate import trapezoid as trapz
 from scipy.special import gamma
 import pytmatrix.scatter as scatter
 import pytmatrix.tmatrix_aux as tmatrix_aux
